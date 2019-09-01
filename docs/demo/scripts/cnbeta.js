@@ -39,5 +39,6 @@ $("body").on("click", ".title", e => {
                 $ele.attr("data-src", src);
             });
             $content.empty().append($body);
-        })
+        });
 });
+window.addEventListener("error", e => alert(e.message));
