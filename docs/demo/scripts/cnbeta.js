@@ -41,7 +41,7 @@ $("body").on("click", ".title", e => {
             $body.find("img").each((i, ele) => {
                 const $ele = $(ele);
                 const src = $ele.attr("src");
-                $ele.attr("src", ProxyFetch.wrapper(src, src));
+                $ele.attr("src", ProxyFetch.wrapper(src, link));
                 $ele.attr("data-src", src);
             });
             $content.empty().append($body);
