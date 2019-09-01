@@ -15,7 +15,7 @@ ProxyFetch.get("https://www.cnbeta.com/backend.php")
             if (!ele) {
                 return;
             }
-            const $ele = $(ele), $title = $("<p />").addClass("title");
+            const $ele = $(ele), $title = $("<a href='javascript:void(0)' />").addClass("title");
 
             try {
                 const link = /link>(https:\/\/\w+\.cnbeta\.com(\/\w+)+\.htm)/.exec(ele.innerHTML || "")[1];
