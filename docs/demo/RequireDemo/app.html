@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <title>Require Demo</title>
+</head>
+
+<body>
+    <script src="../../static/scripts/require-2.2.0.min.js"></script>
+    <script>
+    require.config({
+        baseUrl: "./scripts"
+    });
+    requirejs(["app"], function(app) {
+    	app.start();
+    });
+    require(["modules/home"], function(home){
+    	console.log("home: ", home);
+    });
+    </script>
+</body>
+
+</html>

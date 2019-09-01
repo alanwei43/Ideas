@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>jQuery Carousel</title>
+    <script src="../../../static/scripts/jquery/jquery-1.11.0.js"></script>
+    <!-- jCarousel 类库引用 -->
+    <script src="../../../static/scripts/jcarousel/jquery.jcarousel.js"></script>
+
+    <style type="text/css">
+        .jcarousel-wrapper { margin: 20px auto; position: relative; width: 600px; height: 400px; box-shadow: 0 0 2px #999; }
+
+        /** 幻灯样式 **/
+        .jcarousel { position: relative; overflow: hidden; }
+        .jcarousel ul { width: 20000em; position: relative; list-style: none; margin: 0; padding: 0; }
+        .jcarousel li { float: left; }
+        .jcarousel li img { width: 600px; height: 400px; }
+        /*设置图片的宽高, 图片的宽高要和.jcarousel-wrapper的宽高一致*/
+        .jcarousel li embed { width: 600px; height: 318px; }
+        /*设置视频的宽高. */
+        /*设置图片上文字的样式*/
+        .jcarousel li p { position: absolute; z-index: inherit; color: white; top: 300px; background: black; width: 580px; height: 64px; opacity: .6; padding: 10px; font-family: 'Microsoft YaHei'; font-size: 13px; }
+
+        /** 幻灯控制 **/
+        .jcarousel-control-prev,
+        .jcarousel-control-next { position: absolute; top: 200px; width: 30px; height: 30px; text-align: center; background: #4E443C; color: #fff; text-decoration: none; text-shadow: 0 0 1px #000; font: 24px/27px Arial, sans-serif; box-shadow: 0 0 2px #999; opacity: .8; }
+        .jcarousel-control-prev { left: 0; }
+        .jcarousel-control-next { right: 0; }
+        .jcarousel-control-prev:hover span,
+        .jcarousel-control-next:hover span { display: block; }
+        .jcarousel-control-prev.inactive,
+        .jcarousel-control-next.inactive { opacity: .5; cursor: default; }
+
+        /** 幻灯分页 **/
+        .jcarousel-pagination { position: absolute; bottom: 0; right: 15px; }
+        .jcarousel-pagination a { text-decoration: none; display: inline-block; font-size: 11px; line-height: 14px; min-width: 14px; background: #fff; color: #4E443C; border-radius: 14px; padding: 3px; text-align: center; margin-right: 2px; opacity: .75; }
+        .jcarousel-pagination a.active { background: #4E443C; color: #fff; opacity: 1; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.75); }
+    </style>
+</head>
+<body>
+    <div class="jcarousel-wrapper">
+        <div class="jcarousel">
+            <ul>
+                <li>
+                    <img src="../../../images/material/img1.jpg" />
+                    <p>Reloads the carousel. This method is useful to reinitialize the carousel if you have changed the content of the list from the outside or want to change options that affect appearance of the carousel at runtime.</p>
+                </li>
+                <li>
+                    <img src="../../../images/material/img2.jpg" />
+                    <p>Removes the jCarousel functionality completely. This will return the element back to its initial state.</p>
+                </li>
+                <li>
+                    <img src="../../../images/material/img3.jpg" />
+                    <p>Note: The item-related methods return different results depending on the state of the carousel. That means for example, that after each scroll, these methods return a different set of items.</p>
+                </li>
+                <li>
+                    <img src="../../../images/material/img4.jpg" />
+                    <p>After initialization, you can call the following methods on the jCarousel instance:</p>
+                </li>
+                <li>
+                    <img src="../../../images/material/img5.jpg" />
+                    <p>Carousel-related methods</p>
+                </li>
+                <li>
+                    <img src="../../../images/material/img6.jpg" />
+                    <p>The target item to which the carousel should scroll.</p>
+                </li>
+                <li>
+                    <embed src="http://player.youku.com/player.php/sid/XOTQ2NjkyNDYw/v.swf" allowfullscreen="true" quality="high" align="middle" allowscriptaccess="always" type="application/x-shockwave-flash"></embed>
+                    <p>这是视频引用，最好给图片标题p标签使用png的透明图片当作背景，而不是使用opacity这个css来实现透明效果，因为opacity会使文字也变得透明.</p>
+                </li>
+            </ul>
+        </div>
+        <a href="#" class="jcarousel-control-prev">&lsaquo;</a>
+        <a href="#" class="jcarousel-control-next">&rsaquo;</a>
+        <p class="jcarousel-pagination"> </p>
+    </div>
+
+
+    <div style="margin: 30px auto; width: 600px; font-family: 'Microsoft YaHei', sans-serif;">
+        <p>引用 <a href="http://sorgalla.com/jcarousel/">jCarousel</a>. 上述Demo改自 <a href="http://sorgalla.com/jcarousel/examples/basic/">基本例子</a> </p>
+        <p>
+            其他幻灯类库:
+            <a href="http://www.jssor.com/index.html" title="jQuery Image Slider/Carousel/Slideshow/Gallery Bootstrap+html+javascript TOUCH SWIPE & Responsive">Jssor Slider</a> &nbsp;&nbsp;
+            <a href="http://owlgraphic.com/owlcarousel/" title="Touch enabled jQuery plugin that lets you create beautiful responsive carousel slider.">OWL Carousel</a>
+        </p>
+    </div>
+    <script>
+        $(function () {
+            //幻灯绑定
+            $('.jcarousel').jcarousel({
+                animation: 'slow',
+                wrap: 'circular'
+            });
+
+            //上一个幻灯
+            $('.jcarousel-control-prev')
+                .on('jcarouselcontrol:active', function () {
+                    $(this).removeClass('inactive');
+                })
+                .on('jcarouselcontrol:inactive', function () {
+                    $(this).addClass('inactive');
+                })
+                .jcarouselControl({
+                    target: '-=1'
+                });
+
+            //下一个幻灯
+            $('.jcarousel-control-next')
+                .on('jcarouselcontrol:active', function () {
+                    $(this).removeClass('inactive');
+                })
+                .on('jcarouselcontrol:inactive', function () {
+                    $(this).addClass('inactive');
+                })
+                .jcarouselControl({
+                    target: '+=1'
+                });
+
+            //页码
+            $('.jcarousel-pagination')
+                .on('jcarouselpagination:active', 'a', function () {
+                    $(this).addClass('active');
+                })
+                .on('jcarouselpagination:inactive', 'a', function () {
+                    $(this).removeClass('active');
+                })
+                .jcarouselPagination();
+        });
+    </script>
+
+
+</body>
+</html>

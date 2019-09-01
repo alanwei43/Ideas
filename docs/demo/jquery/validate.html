@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../static/scripts/jquery/jquery-1.11.0.min.js"></script>
+    <style type="text/css">
+        input.error{color: red;}
+    </style>
+    <script>
+        $.ready.promise().done(function () {
+            $('form input').on('keypress', function () {
+                var value = $(this).val();
+                var regexValue = $(this).data('regex');
+                var reg = new RegExp(regexValue);
+                if (!reg.test(value)) {
+                    $(this).addClass('error');
+                } else {
+                    $(this).removeClass('error');
+                }
+                console.log('touch');
+            });
+        });
+    </script>
+</head>
+<body>
+    &nbsp;
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label>First name</label>
+                        <input type="text" value="" class="form-control" data-regex="^\w+$" />
+                    </div>
+                    <div class="form-group">
+                        <label>Last name</label>
+                        <input type="text" value="" class="form-control" data-regex="^\w+$" />
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="text" value="" class="form-control" data-regex="^\w+@\w+\.\w+$" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" value="" class="form-control" data-regex="^.+$" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        &nbsp;
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    <li class="list-group-item">Chrome 2+ - using the PostMessageTransport</li>
+                    <li class="list-group-item active">Safari 4+ - using the PostMessageTransport</li>
+                    <li class="list-group-item">Firefox 3+ - using the PostMessageTransport</li>
+                    <li class="list-group-item">Firefox 1-2 - using the FrameElementTransport</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

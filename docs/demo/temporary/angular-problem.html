@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Angular Radio Input</title>
+</head>
+<body>
+    <div ng-app="MyApp">
+        <div ng-controller="RightCtrl">
+            <h5>正确的绑定</h5>
+            <label ng-repeat="d in dict">
+                <input type="radio" ng-model="main.edu" ng-value="d" /> {{d.text}} &nbsp;
+            </label>
+            <br />
+            <span>{{main.edu | json}}</span>
+        </div>
+
+        <div ng-controller="WrongCtrl">
+            <h5>错误的绑定</h5>
+            <label ng-repeat="d in dict">
+                <input type="radio" ng-model="edu" ng-value="d" /> {{d.text}} &nbsp;
+            </label>
+            <br />
+            <span class="text-info">{{edu | json}}</span>
+        </div>
+
+    </div>
+
+    <script src="../../static/scripts/angular-1.2.15/angular.min.js"></script>
+
+    <script>
+        var app = angular.module('MyApp', []);
+
+        app.controller('RightCtrl', function ($scope) {
+            $scope.main = {
+                edu: {}
+            };
+            $scope.dict = [{
+                text: '高中',
+                value: 'gaozhong'
+            }, {
+                text: '小学',
+                value: 'xiaoxue'
+            }];
+
+            $scope.main.edu = $scope.dict[0];
+        });
+        app.controller('WrongCtrl', function ($scope) {
+            $scope.edu = {};
+            $scope.dict = [{
+                text: '高中',
+                value: 'gaozhong'
+            }, {
+                text: '小学',
+                value: 'xiaoxue'
+            }];
+
+            $scope.edu = $scope.dict[0];
+        });
+
+    </script>
+</body>
+</html>

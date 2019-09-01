@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <title>Velocity</title>
+    <style type="text/css">
+    .block {
+        margin: 10px auto;
+        padding: 10px;
+        border: 1px solid black;
+        background-color: #0094ff;
+        color: white;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="block">
+        2) If you're using RequireJS to load Velocity with Zepto, replace "jquery" mentions with "zepto" in the configuration example above. (Tip: Zepto isn't natively compatible with module loaders, so you'll need to manually assign var $ = window.Zepto inside your RequireJS callback to populate the $ variable for usage.) 3) If you're using Velocity by itself (as in, without jQuery or Zepto), simply require Velocity as normal (without any shimmed dependencies) and animate via the utility function as described in the Using Velocity without jQuery section above.
+    </div>
+    <script src="../../static/scripts/jquery/jquery-1.11.0.js"></script>
+    <script src="../../static/scripts/velocity-1.2.3.min.js"></script>
+    <script>
+    $(".block").velocity({
+        "margin-top": 300,
+        width: 300
+    }, {
+        duration: 1000,
+        complete: function() {
+            console.log("complete");
+        }
+    }).velocity({
+    	rotateZ: 360
+    }, {
+    	duration: 5000,
+    	loop: true,
+    	delay: false,
+    	easing: "easing-in"
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <title>Turnable</title>
+    <style type="text/css">
+    @keyframes turnable {
+        from {
+            transform: rotateZ(0deg);
+        }
+        to {
+            transform: rotateZ(360deg);
+        }
+    }
+    
+    .run {
+        animation-name: turnable;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-delay: 0s;
+        animation-fill-mode: none;
+        animation-direction: normal;
+    }
+    
+    .stop {
+        animation-name: turnable;
+        animation-duration: 1s;
+        animation-iteration-count: 2;
+        animation-timing-function: ease;
+        animation-delay: 0s;
+        animation-fill-mode: none;
+        animation-direction: normal;
+    }
+    
+    .turnable {
+        position: absolute;
+        top: 30px;
+        left: 90px;
+        width: 400px;
+        height: 400px;
+        background-image: url(./turntable.png);
+        background-repeat: no-repeat;
+    }
+    
+    .pointer {
+        width: 200px;
+        height: 200px;
+        left: 200px;
+        top: 120px;
+        position: absolute;
+        background-image: url(./pointer.png);
+        background-repeat: no-repeat;
+        z-index: 2;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="turnable"> </div>
+    <div class="pointer"></div>
+    <script src="../../../static/scripts/jquery/jquery-1.11.0.js"></script>
+    <script>
+    var $pointer = $(".pointer"),
+        $turnable = $(".turnable");
+    var count = 0;
+    $pointer.on("click", function() {
+        $turnable.addClass("run");
+    });
+
+    $turnable.on("animationstart", function(e) {
+        console.log(e.type);
+    });
+    $turnable.on("animationiteration", function(e) {
+        console.log(e.type, ++count);
+        if (count > 2) {
+            $turnable.removeClass("run");
+        }
+    });
+    $turnable.on("animationend", function(e) {
+        console.log(e.type);
+        $turnable.addClass("stop");
+    });
+
+    var easing = function(speed) {
+    	var turnable = $turnable[0];
+        var transform = turnable.style.transform || "rotateZ(0deg)";
+        var number = parseInt(/rotateZ\((\d+)deg\)/g.exec(transform)[1]);
+        if (isNaN(number)) {
+            number = 0;
+        }
+        number += 1;
+
+        turnable.style.transform = "rotateZ(" + number + "deg)";
+
+        setTimeout(function() {
+        	easing(speed);
+        }, speed);
+    };
+    var stop = function (speed, target) {    	
+    	var turnable = $turnable[0];
+        var transform = turnable.style.transform || "rotateZ(0deg)";
+        var number = parseInt(/rotateZ\((\d+)deg\)/g.exec(transform)[1]);
+        if (isNaN(number)) {
+            number = 0;
+        }
+        var distance = target - number;
+
+        number += ;
+
+        if(distance === 0){
+        	return;
+        }
+
+
+
+        turnable.style.transform = "rotateZ(" + number + "deg)";
+
+        setTimeout(function() {
+        	easing(speed, target);
+        }, speed);
+    }
+
+    easing(0.01);
+
+
+    </script>
+</body>
+
+</html>

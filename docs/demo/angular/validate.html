@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <title>Validate - Angular</title>
+    <script src="../../static/scripts/angular-1.2.15/angular.min.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular-route.min.js"></script>
+    <link href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" />
+    <!-- Views -->
+    <script type="text/html" id="view-profile">
+        <div class="row profile">
+            <div class="col-md-4 col-md-offset-4 col-sm-12">
+                <h2>Profile</h2>
+                <ul class="list-item">
+                    <li class="item">E-mail: {{user.email}}</li>
+                    <li class="item">User name: {{user.userName}}</li>
+                    <li class="item">Age: {{user.age}}</li>
+                    <li class="item">Password: {{user.password}}</li>
+                </ul>
+                <div>
+                    <a href="#/" class="btn btn-default">Home</a>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="view-validate">
+        <div class="row validate">
+            <div class="col-md-4 col-md-offset-4 col-sm-12">
+                <h2>Validate</h2>
+                <form class="form-horizontal" name="Validate" novalidate>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" name="email" ng-model="user.email" class="form-control" ng-class="{invalid: Validate.email.$invalid}" required placeholder="E-mail address" />
+                    </div>
+                    <div class="form-group">
+                        <label>User name</label>
+                        <input type="text" name="userName" ng-model="user.userName" class="form-control" ng-class="{invalid: Validate.userName.$invalid}" required ng-maxlength="10" ng-minlength="3" placeholder="User name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="text" name="age" class="form-control" ng-class="{invalid: Validate.age.$invalid}" ng-model="user.age" ng-pattern="/^\d{1,3}$/" required placeholder="Your age" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" ng-model="user.password" class="form-control" ng-class="{invalid: Validate.password.$invalid}" required maxlength="15" ng-maxlength="15" ng-minlength="6" placeholder="Your password" />
+                    </div>
+                    <div class="form-group">
+                        <label>Password Confirm</label>
+                        <input type="password" name="confirm" value="" ng-model="user.confirm" equal-match data-other="user.password" class="form-control" ng-class="{invalid: Validate.confirm.$invalid}" placeholder="Confirm your password" />
+                    </div>
+                    <div>
+                        <button class="btn btn-default" ng-disabled="!Validate.$valid" ng-click="submit()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+
+    <style type="text/css">
+        /*
+            auto general class when angular handle form:
+            .ng-pristine:   unmodified form
+            .ng-dirty:      modified form
+            .ng-valid:      valid form
+            .ng-invalid:    invalid form
+            .ng-valid-[reuqire/pattern/maxlength/minlength]   valid class
+
+            Infact, you can use ng-valid/ng-invalid class to mark valid/invalid form.
+        * */
+        .invalid.ng-dirty {
+            border: 1px solid rgb(248, 83, 83);
+            transition: border 1s ease 0s;
+        }
+
+        .invalid.ng-dirty:focus {
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(252, 43, 43, 0.80);
+        }
+
+        input.form-control {
+            color: #666;
+            transition: color 1s ease 0s;
+        }
+
+        input.form-control:focus {
+            color: #0094ff;
+        }
+    </style>
+
+    <script type="text/javascript">
+        Object.prototype.eGetValue = function (attrs) {
+            if (!attrs) {
+                return this;
+            }
+
+            attrs = attrs.split('.');
+            var lastValue = this[attrs[0]];
+            if (lastValue == undefined) {
+                return undefined;
+            }
+            for (var i = 1; i < attrs.length; i++) {
+                var attr = attrs[i];
+                lastValue = lastValue[attr];
+                if (lastValue == undefined) {
+                    return lastValue;
+                }
+            }
+            return lastValue;
+        }
+
+        var app = angular.module('myApp', ['ngRoute']);
+
+        //route
+        app.config(function ($routeProvider) {
+            $routeProvider
+            .when('/', {
+                controller: 'ValidCtrl',
+                template: document.querySelector('#view-validate').innerHTML
+            })
+            .when('/profile', {
+                controller: 'ProfileCtrl',
+                template: document.querySelector('#view-profile').innerHTML
+            })
+            .otherwise('/');
+        });
+
+        //custome validate
+        app.directive('equalMatch', function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, ele, attrs, c) {
+                    var other = attrs.other;
+                    var ngmodel = attrs.ngModel;
+                    scope.$watch(attrs.ngModel, function (newVal) {
+                        var otherValue = scope.eGetValue(other);
+                        if (newVal == otherValue) {
+                            c.$setValidity(attrs.ngModel, true);
+                        } else {
+                            c.$setValidity(attrs.ngModel, false);
+                        }
+                    });
+                    scope.$watch(attrs.other, function (newVal) {
+                        var otherValue = scope.eGetValue(ngmodel);
+                        if (newVal == otherValue) {
+                            c.$setValidity(attrs.ngModel, true);
+                        } else {
+                            c.$setValidity(attrs.ngModel, false);
+                        }
+                    });
+                }
+            };
+        });
+
+        //register service
+        app.factory('UserSvc', function () {
+            var service = {
+                email: '',
+                userName: '',
+                age: undefined,
+                password: '',
+                confirm: ''
+            };
+            return service;
+        });
+
+        app.controller('ValidCtrl', function ($scope, UserSvc, $location) {
+            $scope.user = UserSvc;
+            $scope.submit = function () {
+                $location.path('/profile');
+            };
+        });
+        app.controller('ProfileCtrl', function ($scope, UserSvc) {
+            $scope.user = UserSvc;
+        });
+    </script>
+</head>
+<body>
+    <div ng-app="myApp">
+        <div class="container" ng-view>
+        </div>
+    </div>
+</body>
+</html>

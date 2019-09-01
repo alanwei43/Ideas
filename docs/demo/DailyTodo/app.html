@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>Daily Todo</title>
+    <script src="../../static/scripts/jquery/jquery-2.1.0.min.js"></script>
+    <script src="../../static/scripts/amplify.min.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular.min.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular-route.min.js"></script>
+    <link rel="stylesheet" href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css"/>
+    <script src="scripts/model.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/routes.js"></script>
+    <script src="scripts/controllers.js"></script>
+    <script src="scripts/services.js"></script>
+    <style type="text/css">
+        *{transition: all 0.8s ease 0;}
+        ol, ul{margin: 0; padding: 0}
+        .todo-nav {
+            padding-left: 0;
+            margin: 10px 0;
+            margin-top: 0;
+            height: 50px;
+            background-color: #555;
+            opacity: 0.8;
+            color: white;
+            list-style-type: none;
+        }
+
+        .todo-nav li {
+            float:left;
+        }
+
+        .todo-nav li a {
+            display: inline-block;
+            width: 100px;
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color:white;
+        }
+
+        .todo-nav li a:hover {
+            background-color: #0094ff;
+        }
+
+        .todo-nav li:last-child{
+            line-height: 50px;
+            float: right;
+        }
+
+        .todo-nav li:last-child input {
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            vertical-align: middle;
+            color:black;
+        }
+        @media screen and (max-width:550px){
+            .todo-nav {height:auto;}
+            .todo-nav li ,.todo-nav li:last-child{display: block; float: none; text-align: center; }
+            .todo-nav li a{width: 100%;}
+        }
+    </style>
+</head>
+<body ng-app="DailyTodo" ng-controller="BodyCtrl">
+
+<ul id="nav" class="todo-nav">
+    <li>
+        <a href="#/">Home</a>
+    </li>
+    <li>
+        <a href="#/list">Task List</a>
+    </li>
+    <li>
+        <a href="#/insert">Insert Task</a>
+    </li>
+    <li>
+        <a href="#/plains">Plains</a>
+    </li>
+    <li  ng-controller="UserNameCtrl">
+        <span>Welcome, </span>
+        <b ng-hide="modifing" ng-click="modifyName()" title="Click and edit name">{{user.name}}</b>
+        <input ng-hide="!modifing" type="text" ng-model="user.name"/>
+        <button ng-hide="!modifing" class="btn btn-sm" ng-click="submitName()">Confirm</button>
+        <span>.</span>
+    </li>
+</ul>
+
+<div id="main" class="container-fluid" ng-view></div>
+<footer id="footer"></footer>
+</body>
+</html>

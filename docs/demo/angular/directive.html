@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Directive - Angular</title>
+    <script src="../../static/scripts/jquery/jquery-1.11.0.min.js"></script>
+    <script src="../../static/scripts/jquery/jquery.tmpl.min.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular-route.min.js"></script>
+    <link href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" />
+    <script type="text/ng-template" id="directive-pagination">
+        <div>{{newName}}</div>
+    </script>
+   
+    <!-- Views -->
+    <script type="text/html" id="view-home">
+        <div pagination my-name="person.name"></div>
+        <input type="text" value="" ng-model="person.name" />
+    </script>
+    <script>
+        var app = angular.module('DirectiveApp', ['ngRoute']);
+        app.directive('pagination', function () {
+            return {
+                restrict: "EA",
+                replace: true,
+                scope:{newName:'=myName'},
+                template: document.querySelector('#directive-pagination').innerHTML
+            };
+        });
+        app.config(function ($routeProvider) {
+            $routeProvider
+            .when('/', {
+                controller: 'HomeCtrl',
+                template: document.querySelector('#view-home').innerHTML
+            })
+            .otherwise('/')
+        });
+        app.controller('HomeCtrl', function ($scope, $q) {
+            $scope.person = { name: 'Alan', age: 23 };
+        });
+    
+    </script>
+</head>
+<body ng-app="DirectiveApp">
+    <div class="container" ng-view></div>
+</body>
+</html>

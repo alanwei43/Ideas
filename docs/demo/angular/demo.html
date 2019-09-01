@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo - Angular</title>
+    <script src="../../static/scripts/angular-1.2.15/angular.min.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular-route.min.js"></script>
+    <link href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+        li.isLast{color: #82c342;}
+    </style>
+    <script>
+        var app = angular.module('DemoApp', []);
+        app.factory('MessageSvc', function(){
+            var service = {};
+            service._stacks = [];
+            service.on = function(fn){
+                service._stacks.push(fn);
+            };
+            service.emit=function(){
+                service._stacks.forEach(function(fn){
+                    fn.apply(arguments);
+                })
+            };
+            return service;
+        });
+
+        app.controller('HomeCtrl', function ($scope, MessageSvc) {
+            $scope.items = [
+                {name:'Alan', age:23},
+                {name:'Allen', age:22},
+                {name:'Annr', age:22}
+            ];
+
+            MessageSvc.on(function(){
+                console.log(arguments);
+            });
+            MessageSvc.on(function(){
+                console.log('Hello, second.');
+            })
+        });
+
+        app.controller('ChildCtrl', function($scope, MessageSvc){
+            $scope.send = function(){
+                MessageSvc.emit('Alan', 'Way');
+            };
+        });
+    </script>
+
+</head>
+<body ng-app="DemoApp">
+<div ng-controller="HomeCtrl">
+    <ul>
+        <li ng-repeat="item in items" ng-class="{isLast:$last}">
+            {{item.name}}
+        </li>
+    </ul>
+    <div ng-controller="ChildCtrl">
+        <input type="button" ng-click="send()" class="btn btn-default" value="Message" />
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Two-Way Data binding</title>
+    <script src="../static/scripts/jquery/jquery-1.11.0.min.js"></script>
+    
+</head>
+<body>
+        
+<h1 data-bind-p="name">Hello, world.</h1>
+<input type="text" value="" data-bind-p="name" />
+
+<button id="console">Output on console.</button>
+<hr />
+<input id="set-value" type="text" value="" />
+<button id="set-btn">Set Value</button>
+<script>
+
+    //ui layer bind
+    function DataBinder(userOpt) {
+        var options = {
+            scope: 'body',
+            event: 'keyup',
+            object: '',             //*
+            dataAttr: 'data-bind-'
+        };
+        $.extend(options, userOpt);
+        if (!userOpt.dataAttr) {
+            options.dataAttr = options.dataAttr + options.object;
+        }
+
+        var pubSub = $({});
+        var message = options.object + ':change';
+
+        //listen ui value change
+        $(options.scope).on(options.event, '[' + options.dataAttr + ']', function () {
+            var $input = $(this);
+            var propertyName = $input.attr(options.dataAttr);
+            pubSub.trigger(message, [propertyName, $input.val()]);  //trigger message event, it will update ui layer and object 
+        });
+
+        //update ui
+        pubSub.on(message, function (e, propertyName, newValue) {
+            $(options.scope).find('[' + options.dataAttr + '=' + propertyName + ']').each(function () {
+                var $bind = $(this);
+                if ($bind.is('textarea, input, select')) {
+                    $bind.val(newValue)
+                } else {
+                    $bind.html(newValue);
+                }
+            });
+        });
+        return pubSub;
+    }
+
+    function User(bindOption) {
+        var binder = new DataBinder(bindOption);
+        var user = {
+            attributes:{},
+            set: function (attrName, value) {
+                this.attributes[attrName] = value;
+                binder.trigger(bindOption.object + ':change', [attrName, value, this]);
+            },
+            get: function (attrName) {
+                return this.attributes[attrName];
+            },
+            _binder: binder
+        };
+
+        binder.on(bindOption.object + ':change', function (e, attrName, value, initialtor) {
+            if (initialtor !== user) {
+                user.set(attrName, value);
+            }
+        });
+        return user;
+    }
+
+    var person = new User( {object:'p'});
+    person.set('name', 'Alan')
+  
+    $('#console').on('click', function () {
+        console.log(person.attributes);
+    });
+    $('#set-btn').on('click', function () {
+        person.set('name', $('#set-value').val());
+    });
+</script>
+<p>Via: http://www.oschina.net/translate/easy-two-way-data-binding-in-javascript</p>
+</body>
+</html>

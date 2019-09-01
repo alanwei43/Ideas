@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Increase Numbers</title>
+    <script src="countUp.js"></script>
+</head>
+
+<body>
+    <div id="number"></div>
+    <script>
+    var options = {
+        useEasing: true, 
+        useGrouping: true,
+        separator: ',',
+        decimal: '.',
+        prefix: '',
+        suffix: '',
+        iterator: function(number) {
+            localStorage.setItem("latestNumber", number);
+        }
+    };
+    var storedNumber = parseInt(localStorage.getItem("latestNumber"));
+    var startNumber = isNaN(storedNumber) ? 0 : storedNumber;
+    var numAnim = new CountUp("number", startNumber, 10000000, 2, 100000000, options);
+    numAnim.start();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <label>Task Name</label>
+        <input class="form-control" type="text" ng-model="task.name" placeholder="Task name."/>
+    </div>
+    <div class="form-group">
+        <label>Task Priority</label>
+        <input class="form-control" type="number" ng-model="task.priority" />
+    </div>
+    <div class="form-group">
+        <label>Task Content</label>
+        <input class="form-control" type="text" ng-model="task.content" placeholder="Task description..." />
+    </div>
+    <div class="form-group">
+        <label>Create Date</label>
+        <input class="form-control" type="text" disabled ng-model="task.createDate"/>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-default" ng-click="submit()">Submit</button>
+        <input type="reset" value="Reset" class="btn btn-danger"/>
+    </div>
+</form>

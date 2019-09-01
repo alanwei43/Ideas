@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AutoComplete - RxJS</title>
+    <meta charset="utf-8" />
+    <script src="../../static//scripts/jquery/jquery-1.11.0.js"></script>
+    <script src="../../static//scripts/rx.all.js"></script>
+</head>
+<body>
+    <div>
+        <input type="text" value="" id="keywords" placeholder="please enter keywords..." />
+    </div>
+    <div>
+        <ol id="result"></ol>
+    </div>
+
+    <script>
+     
+        Rx.Observable.fromEvent($("#keywords"), "keyup")
+            .pluck("target", "value")
+            .filter(text => text.length > 2)
+            .debounce(500)
+            .distinctUntilChanged()
+            .flatMapLatest(term => $.ajax({
+                url: "https://en.wikipedia.org/w/api.php",
+                dataType: "jsonp",
+                data: {
+                    action: 'opensearch',
+                    format: 'json',
+                    search: term
+                }
+            }))
+            .subscribe(data => {
+                $("#result").empty().append($.map(data[1], (value, index) => $("<li />").append($("<a />").text(value).attr({ href: data[3][index], target: "_blank" }))));
+            }, error => {
+                console.log(error);
+            });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<style type="text/css">
+    .todo-list {
+    }
+
+    .todo-list ul {
+    }
+
+    .todo-list > li {
+        margin: 10px 0;
+    }
+</style>
+<div class="row todo-list">
+    <div class="col-lg-3 col-sm-6 col-xs-12 list-item" ng-repeat="task in tasks track by task.name">
+        <ul class="list-group">
+            <li class="list-group-item task-name" title="Click to toggle this task">
+                <b>Name: </b>
+                <span>{{task.name}}</span>
+            </li>
+            <li class="list-group-item">
+                <b>Priority: </b>
+                <span>{{task.priority}}</span>
+            </li>
+            <li class="list-group-item">
+                <b>Content: </b>
+                <span>{{task.content}}</span>
+            </li>
+            <li class="list-group-item">
+                <b>Create Date</b>
+                <span>{{task.createDate}}</span>
+            </li>
+            <li class="list-group-item">
+                <a class="btn btn-sm btn-default" ng-href="#/edit/{{$index}}">Edit</a>
+                <button class="btn btn-sm btn-danger" ng-click="delete($index)">Delete</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    $('.todo-list').on('click', '.task-name', function () {
+        $(this).siblings('li').slideToggle();
+    })
+</script>

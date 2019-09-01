@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Scroll And Close Scope</title>
+    <script src="../../static/scripts/jquery/jquery-1.11.0.min.js"></script>
+    <script src="../../static/scripts/jquery/jquery.tmpl.min.js"></script>
+    <link href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .col-xs-6:hover{background-color: #eee;}
+    </style>
+    <script type="text/x-jquery-tmpl" id="temp-order">
+        <div class="col-sm-4 col-xs-6" style="border-top: 1px solid #eee;">
+            <ul class="list-item">
+                <li class="item">${OrderID}</li>
+                <li class="item">${ShipName}</li>
+                <li class="item">${ShipAddress}</li>
+                <li class="item">${ShipCity}</li>
+                <li class="item">${ShipCountry}</li>
+                <li class="item">${CustomerID}</li>
+            </ul>
+        </div>
+    </script>
+    <script>
+        Array.prototype.eSplit = function (start, end) {
+            var result = [];
+            for (var i = start; i < end; i++) {
+                if (this[i]) {
+                    result.push(this[i]);
+                }
+            }
+            return result;
+        };
+        $(document).ready(function () {
+
+            $('body').on('nextPage', function () {
+                var $this = $(this);
+                var nextPage = $this.data('nextPage');
+                if (!nextPage) {
+                    nextPage = 1;
+                }
+                $.getJSON('../data/orders.json', { take: 10, page: nextPage }).success(function (data) {
+                    var take = 10;
+                    var start = (nextPage - 1) * take;
+                    var end = nextPage * take;
+                    $this.data('nextPage', ++nextPage);     //update nextPage number
+
+                    data = data.eSplit(start, end);
+                    var $items = $('#temp-order').tmpl(data);
+                    $('#scroll .row').append($items);
+
+                    //如果窗体高度大于容器高度则继续加载，为了第一次打开页面出现滚动条。
+                    if ($(window).height() >= $('#scroll').height()) {
+                        $('body').trigger('nextPage');
+                    }
+                });
+            });
+
+            var sendRequest = 0;
+            $(window).scroll(function () {
+                //事件节流
+                if (sendRequest == 0) {
+                    sendRequest = setTimeout(function () {
+                        var $win = $(window);
+                        var containerHeight = $('#scroll').height();
+                        var scrollTop = $win.scrollTop();
+                        var winHeight = $win.height();
+                        if (containerHeight <= scrollTop + winHeight) {
+                            $('body').trigger('nextPage');
+                            sendRequest = 0;
+                        }
+                    }, 500);
+                }
+            }).scroll();
+        });
+
+    </script>
+
+</head>
+<body>
+    <div id="scroll" class="container">
+        <div class="row"></div>
+    </div>
+    <script>
+        /*
+        * Close scope:
+        * JavaScript just has function scope and global scope.
+        * Function can use his scope and his parent functions scope.
+        * Function will reset his all variables and functions that under hist scope when excuted per time. For his parent functions' scope variable, he will handle base before(previous value .
+        */
+
+        //Example 1
+        (function () {
+            var count = 0;
+            $('body').on('plus.count', function () {
+                count++;
+            });
+            $('body').on('reduce.count', function () {
+                count--;
+            });
+            $('body').on('count', function () {
+                console.log(count);
+            });
+
+            var interval = setInterval(function () {
+                var innerCount = 0;
+                innerCount++;
+                console.log('Count: ', count);
+                console.log('Inner count: ', innerCount);
+                if (count >= 10) {
+                    clearInterval(interval);
+                }
+                /*
+                * In this scope, we can access 'interval' and 'count' variables, because 'interval' in this parent function scope.
+                * innerCount will always output 1.
+                */
+            }, 1000);
+        })()
+
+        //Example 2
+        function outer() {
+            var i = 0;
+            function inner() {
+                i++;
+                console.log('i: ', i);
+                var j = 0;
+                j++;
+                console.log('j: ', j);
+            }
+            i++;
+            console.log('i: ', i);
+            return inner;
+        }
+        /*
+        * outer()       => i: 1
+        * outer()       => i: 1
+        * outer()       => i: 1
+        * var inner = outer();
+        * inner()       => i: 1, j: 1
+        * inner()       => i: 2, j: 1
+        * inner()       => i: 3, j: 1
+        * outer()       => i: 1
+        * inner()       => i: 4, j: 1
+        * var innernew = outer();       //this will execute outer() function and declare new i variable and return a new inner() function.
+        * innernew()    => i: 1, j: 1   
+        * innernew()    => i: 2, j: 1
+        */
+
+    </script>
+</body>
+</html>

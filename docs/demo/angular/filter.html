@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Filter - Angular</title>
+    <script src="../../static/scripts/angular-1.2.15/angular.min.js"></script>
+    <script src="../../static/scripts/angular-1.2.15/angular-route.min.js"></script>
+    <link href="../../static/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" />
+    <script>
+        var app = angular.module('FilterApp', []);
+        app.filter('cool', function () {
+            return function (input) {
+            };
+        });
+        app.controller('HomeCtrl', function ($scope, $filter) {
+            window.filter = $filter;
+            $scope.user = {
+                money: $filter('currency')(204.23),
+                name:'Alan'
+            };
+        });
+    </script>
+
+</head>
+<body ng-app="FilterApp">
+    <div class="container">
+        <div class="row" ng-controller="HomeCtrl">
+            <div ng-bind="user.money"></div>
+            <div ng-bind="user.name | limitTo: 2"></div>
+        </div>
+    </div>
+</body>
+</html>

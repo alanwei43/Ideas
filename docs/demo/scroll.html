@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Scroll Sample v2</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+    <style type="text/css">
+    * {
+        padding: 0;
+    }
+    
+    .scroll {
+        margin: 0 auto;
+        position: relative;
+        border: 1px solid green;
+        height: 25px;
+        width: 300px;
+        overflow: hidden;
+    }
+    
+    .scroll div {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        width: auto;
+        list-style-type: none;
+        height: 25px;
+        white-space: nowrap;
+    }
+    
+    .scroll div a {
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        font-family: "Microsoft YaHei", sans-serif;
+        display: inline-block;
+        white-space: nowrap;
+        width: 300px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="scroll">
+        <div>
+            <a href="#">1 据外媒报道， Facebook当地时间周一宣布与微软、Twitter和YouTube等公司一起参加全球互联网大会反恐论坛，其目标是通过“对其服务中的恐怖主义和暴力极端主义内容采取强硬措施”来打击恐怖主义和暴力极端主义。</a>
+            <a href="#">2 任天堂正式公布迷你超任主机Mini SFC（欧美版为Super NES经典复刻版），售价为80美元，9月29日正式发售。其中内含21个经典游戏，最令人惊喜的时包括一个从未公开发售的SFC作品《星际火狐2》，具体游戏阵容如下。</a>
+            <a href="#">3 在预告Chromebook用户迎来全新登陆和锁屏界面之后，Chromium传道者François Beaufort又向我们分享了已经在Chrome Canary通道中出现的新功能。该开发者个人Google+的更新中展示了全新的电源控制选项，当Chromebook处于闭合状态或者电脑处于闲置状态时对电量的控制。</a>
+            <a href="#">4 自 2007 年以来，英特尔主流桌面处理器多为 4 / 8 核心的设计。但据 WCCFTech 爆料，Geekbench 数据库中惊现了一款 6 核 / 12 线程的 Coffee Lake 处理器。数据采集自一台采用 LGA 1151 插槽的主板（很可能是 Z270 芯片组），处理器二级缓存为 1.5 MB、三级缓存为 12 MB，但频率仅 3.2 GHz（未指明是默频或睿频）。</a>
+            <a href="#">5 日前，外媒theverge刊文称，《权力的游戏》这部剧是一个三面手：伟大的表演、出色的视觉设计以及持续不断令人震惊与意外的反转戏码。然而事实证明，粉丝们开始能够更加容易得猜到这部剧的剧情发展。</a>
+        </div>
+    </div>
+    <button id="prev">Prev</button>
+    <button id="next">Next</button>
+    <script>
+    $.fn.scrollShow = function(options) {
+        var $scroll = $(this);
+        var $row = $scroll.find("div");
+
+        var defOptions = {
+            width: 300,
+            wait: 4000,
+            animate: 2000
+        };
+        if (options) {
+            $.extend(defOptions, options);
+        }
+        var timer = undefined;
+        var isStop = false;
+        var controls = {
+            _getCount: function() {
+                return $row.find("a").length;
+            },
+            prev: function() {
+                var currentLeft = parseInt($row.data("currentLeft"));
+                var preLeft = 0;
+                if (isNaN(currentLeft)) {
+                    preLeft = 0;
+                } else {
+                    var count = controls._getCount();
+                    if (currentLeft === 0) {
+                        preLeft = defOptions.width * (count - 1) * -1;
+                    } else {
+                        preLeft = (Math.abs(currentLeft) / defOptions.width - 1) * defOptions.width * -1;
+                    }
+                }
+                $row.data("currentLeft", preLeft);
+
+                var defer = $.Deferred();
+                $row.animate({
+                    "left": preLeft
+                }, defOptions.animate, function(){
+                    defer.resolve();
+                });
+                return defer.promise();
+            },
+            next: function() {
+                var currentLeft = parseInt($row.data("currentLeft"));
+                var nextLeft = 0;
+                if (isNaN(currentLeft)) {
+                    nextLeft = 0;
+                } else {
+                    var count = controls._getCount();
+                    var currentPosition = Math.abs(currentLeft) / defOptions.width + 1;
+                    if (currentPosition === count) {
+                        //当前已经是最后一个
+                        nextLeft = 0;
+                        $row.css("left", defOptions.width);
+                    } else {
+                        nextLeft = currentPosition * defOptions.width * -1;
+                    }
+                }
+                $row.data("currentLeft", nextLeft);
+
+                var defer = $.Deferred();
+                $row.animate({
+                    "left": nextLeft
+                }, defOptions.animate, function(){
+                    defer.resolve();
+                });
+                return defer.promise();
+            },
+            goPrev: function(){
+                clearInterval(timer);
+                controls.prev().then(function(){
+                    controls.start();
+                });
+            },
+            goNext:function(){                
+                clearInterval(timer);
+                controls.next().then(function(){
+                    controls.start();
+                });;
+            },
+            stop: function() {
+                isStop = true;
+                clearInterval(timer);
+            },
+            start: function() {
+                clearInterval(timer);
+                timer = setInterval(function() {
+                    controls.next();
+                }, defOptions.wait);
+            }
+        };
+        controls.start();
+
+        return controls;
+    };
+
+    var ctrl = $(".scroll").scrollShow({
+        width: 300
+    });
+
+    $("#prev").on("click", function() {
+        ctrl.goPrev();
+    });
+    $("#next").on("click", function() {
+        ctrl.goNext();
+    });
+    </script>
+</body>
+
+</html>
