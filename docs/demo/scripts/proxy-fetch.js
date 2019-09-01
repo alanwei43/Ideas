@@ -1,4 +1,4 @@
-const PROXY = "http://47.52.157.46:8089";
+let PROXY = "http://47.52.157.46:8089/proxy";
 
 /**
  * 
@@ -24,5 +24,10 @@ ProxyFetch.get = function (url) {
             "x-cors-headers": "x-proxy-url, x-cors-headers"
         }
     });
+};
+ProxyFetch.updateProxy = function (proxy) {
+    if (proxy) {
+        PROXY = proxy;
+    }
 };
 export default ProxyFetch;

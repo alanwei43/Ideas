@@ -1,5 +1,6 @@
 import ProxyFetch from "./proxy-fetch.js";
 
+ProxyFetch.updateProxy(localStorage.getItem("proxy"));
 
 ProxyFetch.get("https://www.cnbeta.com/backend.php")
     .then(response => response.text())
@@ -40,5 +41,13 @@ $("body").on("click", ".title", e => {
             });
             $content.empty().append($body);
         });
+});
+
+$("#update").on("click", function () {
+    const proxy = $("#proxy").val();
+    if (proxy) {
+        localStorage.setItem("proxy", proxy);
+        ProxyFetch.updateProxy(proxy);
+    }
 });
 window.addEventListener("error", e => alert(e.message));
