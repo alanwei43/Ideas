@@ -1,6 +1,11 @@
 import ProxyFetch from "./proxy-fetch.js";
 
-ProxyFetch.updateProxy(localStorage.getItem("proxy"));
+const params = new URLSearchParams(location.search);
+const proxyUrl = params.get("proxy-url");
+
+if (proxyUrl) {
+    ProxyFetch.updateProxy(proxyUrl);
+}
 
 ProxyFetch.get("https://www.cnbeta.com/backend.php")
     .then(response => response.text())
@@ -43,11 +48,4 @@ $("body").on("click", ".title", e => {
         });
 });
 
-$("#update").on("click", function () {
-    const proxy = $("#proxy").val();
-    if (proxy) {
-        localStorage.setItem("proxy", proxy);
-        ProxyFetch.updateProxy(proxy);
-    }
-});
 window.addEventListener("error", e => alert(e.message));

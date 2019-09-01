@@ -28,6 +28,7 @@ ProxyFetch.get = function (url) {
 ProxyFetch.updateProxy = function (proxy) {
     if (proxy) {
         PROXY = proxy;
+        alert("Update Proxy: " + proxy);
     }
 };
 export default ProxyFetch;
