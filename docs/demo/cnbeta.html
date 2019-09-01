@@ -10,65 +10,11 @@
 </head>
 
 <body>
-    <div style="float: left; width: 40%;">
-        <ol></ol>
+    <div>
+        <ol class="news-list"></ol>
     </div>
-    <div  id="news" style="float: right; width: 58%;"></div>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script>
-        fetch("http://47.52.157.46:8089/", {
-            method: "GET",
-            headers: {
-                "x-proxy-url": "https://www.cnbeta.com/backend.php",
-                "x-cors-headers": "x-dest-url, x-cors-headers"
-            }
-        }).then(response => response.text()).then(data => {
-            let $data = $(data),
-                $list = $("ol");
-            $data.find("item").each((i, ele) => {
-                if (!ele) {
-                    return;
-                }
-                const $ele = $(ele),
-                    $li = $("<li />");
-
-                let link;
-                try {
-                    link = /link>(https:\/\/\w+\.cnbeta\.com(\/\w+)+\.htm)/.exec(ele.innerHTML || "")[1];
-                    $li.attr("data-link", link);
-                } catch (ex) {
-                    console.log(ex);
-                }
-                $li.text($ele.find("title").text());
-                $list.append($li);
-            });
-        });
-        $("body").on("click", "li", e => {
-            let link = $(e.target).data("link");
-            loadNews(link);
-        });
-
-        function loadNews(link) {
-            fetch("http://47.52.157.46:8089/", {
-                    method: "GET",
-                    headers: {
-                        "x-proxy-url": link,
-                        "x-cors-headers": "x-dest-url, x-cors-headers"
-                    }
-                }).then(response => response.text())
-                .then(data => $(data))
-                .then($response => {
-                    $("#news").empty()
-                        .append($response.find("#artibody"))
-                        .find("img")
-                        .each((i, ele) => {
-                            const $ele = $(ele);
-                            const src = encodeURIComponent($ele.attr("src"));
-                            $ele.attr("src", `http://47.52.157.46:8089/?x-proxy-url=${src}&x-referrer-url=${src}`);
-                        });
-                })
-        }
-    </script>
+    <script type="module" src="./scripts/cnbeta.js"></script>
 </body>
 
 </html>
