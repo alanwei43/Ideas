@@ -14,7 +14,10 @@
         <ol class="news-list"></ol>
     </div>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-    <script type="module" src="./scripts/cnbeta.js"></script>
+    <script src="./scripts/cnbeta.js"></script>
+    <script>
+        navigator.serviceWorker.register("./sw.js");
+    </script>
 </body>
 
 </html>

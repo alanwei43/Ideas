@@ -1,0 +1,1 @@
+importScripts("./scripts/proxy-fetch.js");
