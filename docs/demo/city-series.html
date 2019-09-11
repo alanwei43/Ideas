@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <ol id="list">
+        </ol>
+    </div>
+    <script>
+        const series = Array.from(Array(9999)).map((val, index) => index + 1);
+        let algorithm = null;
+        fetch("https://dealer.m.autohome.com.cn/handler/other/getdata?__action=dealer.GetCityList")
+            .then(response => response.json())
+            .then(data => {
+                return data.map(item => item.list).reduce((prev, next) => prev.concat(next), []).map(c => c.Id);
+            })
+            .then(data => {
+                const results = {};
+                data.forEach(cityId => {
+                    series.forEach(seriesId => {
+                        const key = algorithm(cityId, seriesId);
+                        let store = results[key];
+                        if (!store) {
+                            results[key] = [];
+                            store = results[key];
+                        }
+                        store.push({
+                            city: cityId,
+                            series: seriesId
+                        });
+                    });
+                });
+
+                var eleList = document.getElementById("list");
+                Object.keys(results).filter(key => results[key].length > 1).map(key => `${key}: ${JSON.stringify(results[key])}`).forEach(item => {
+                    console.log(item);
+                    const eleLi = document.createElement("li");
+                    eleLi.textContent = item;
+                    eleList.appendChild(eleLi);
+                });
+            });
+        /*
+                algorithm = function (cityId, seriesId) {
+                    let c = cityId + "",
+                        s = seriesId + "",
+                        last = parseInt(c[5]);
+
+                    while (s.length < 4) {
+                        s = "0" + s;
+                    }
+
+                    const sum = (parseInt(c[4]) + last).toString();
+                    const result = `${c.substr(0, 4)}${s}`;
+                    let pos = last % 9;
+                    //12341234
+                    if (pos === 8) {
+                        pos = 0;
+                    }
+                    return result.substr(0, pos) + sum + result.substr(pos);
+                }
+        */
+        algorithm = function (cityId, seriesId) {
+            let c = cityId + "",
+                s = seriesId + "";
+            if (c[4] === "0" && c[5] === "0") {
+                while (s.length < 6) {
+                    s = "0" + s;
+                }
+                return parseInt(c) + parseInt("1" + s.substr(1));
+            } else {
+                while (s.length < 8) {
+                    s = "0" + s;
+                }
+                return parseInt(c) + parseInt("1" + s.substr(1));
+            }
+        }
+    </script>
+</body>
+
+</html>
