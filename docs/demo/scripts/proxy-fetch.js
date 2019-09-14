@@ -1,5 +1,5 @@
 const params = new URLSearchParams(location.search);
-const PROXY = params.get("proxy-url") || "http://47.52.157.46:8089/proxy";
+const PROXY = params.get("proxy-url") || "https://www.alanwei.net/web-proxy";
 console.log(`Proxy Url: `, PROXY);
 
 self.addEventListener("install", () => {
