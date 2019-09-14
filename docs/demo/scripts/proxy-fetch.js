@@ -1,5 +1,5 @@
 const params = new URLSearchParams(location.search);
-const PROXY = "http://localhost:8089/proxy" //params.get("proxy-url") || "http://47.52.157.46:8089/proxy";
+const PROXY = params.get("proxy-url") || "http://47.52.157.46:8089/proxy";
 console.log(`Proxy Url: `, PROXY);
 
 self.addEventListener("install", () => {

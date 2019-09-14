@@ -7,6 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>cnBeta</title>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        img {
+            display: block;
+            margin: 0 auto;
+            width: 90%;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,7 +23,8 @@
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="./scripts/cnbeta.js"></script>
     <script>
-        navigator.serviceWorker.register("./sw.js");
+        const params = new URLSearchParams(location.search);
+        navigator.serviceWorker.register("/ideas/demo/sw.js?proxy-url=" + encodeURIComponent(params.get("proxy-url") || ""));
     </script>
 </body>
 

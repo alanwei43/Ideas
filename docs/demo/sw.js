@@ -1,1 +1,1 @@
-importScripts("./scripts/proxy-fetch.js");
+importScripts("/ideas/demo/scripts/proxy-fetch.js");
