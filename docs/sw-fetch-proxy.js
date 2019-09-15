@@ -29,7 +29,6 @@ self.addEventListener("fetch", event => {
 
         reqUrl = reqUrl.split("?")[0] + "?" + reqUrlParams.toString();
     }
-    proxyUrlParams.append("x-proxy-url", reqUrl);
 
     const headers = {
         "x-proxy-url": reqUrl,
@@ -38,15 +37,25 @@ self.addEventListener("fetch", event => {
     };
     Array.from(req.headers).forEach(kv => headers[kv[0]] = kv[1]);
 
-    event.respondWith(self.fetch(`${PROXY}?${proxyUrlParams.toString()}`, {
-        cache: req.cache,
-        credentials: req.credentials,
-        headers: headers,
-        keepalive: req.keepalive,
-        method: req.method,
-        mode: req.mode,
-        // bodyUsed: req.bodyUsed,
-        // redirect: req.redirect,
-        // referrer: req.referrer
-    }));
+    const doFetch = data => {
+        const reqOpts = {
+            cache: req.cache,
+            credentials: req.credentials,
+            headers: headers,
+            keepalive: req.keepalive,
+            method: req.method,
+            mode: req.mode
+        };
+        if (data) {
+            reqOpts.body = data;
+        }
+        return self.fetch(`${PROXY}?${proxyUrlParams.toString()}`, reqOpts);
+    };
+
+    const reqMethod = req.method.toLocaleLowerCase()
+    if (["get", "head"].includes(reqMethod)) {
+        event.respondWith(doFetch());
+    } else {
+        event.respondWith(event.request.arrayBuffer().then(doFetch));
+    }
 });

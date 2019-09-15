@@ -14,6 +14,11 @@ module.exports = {
             entry: "src/cnbeta/main.js",
             template: "templates/cnbeta.html",
             filename: "cnbeta.html",
+        },
+        ituring:{
+            entry: "src/ituring/main.js",
+            template: "templates/ituring.html",
+            filename: "ituring.html",
         }
     },
     devServer: {
@@ -24,8 +29,7 @@ module.exports = {
                 res.writeHead(200, {
                     "Content-Type": "application/javascript"
                 });
-                const data = fs.readFileSync("templates/sw-fetch-proxy.js", {});
-                res.end(data);
+                res.end("ok");
             });
         }
     },

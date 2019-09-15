@@ -43,8 +43,6 @@ nav a {
   border-radius: 20px;
   text-align: center;
 }
-.news-list {
-}
 .news-list li {
   margin: 10px auto;
   display: block;
