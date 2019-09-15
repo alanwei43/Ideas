@@ -18,11 +18,12 @@ export function getNewsList(page) {
 }
 
 export function getNewsDetail(link) {
-    return fetch("https://news.cnblogs.com" + link)
+    const reqLink = "https://news.cnblogs.com" + link
+    return fetch(reqLink)
         .then(response => response.text())
         .then(data => {
             const doc = parseHtml(data);
             const body = doc.querySelector("#main_body").innerHTML;
-            return body.replace(/<a href="(\/\/[^"]+)">\[图片\]<\/a>/g, `<img src="https:$1?x-referrer-url=null" />`);
+            return body.replace(/<a href="(\/\/[^"]+)">\[图片\]<\/a>/g, `<img src="https:$1?x-referrer-url=${encodeURIComponent(reqLink)}" />`);
         });
 }
