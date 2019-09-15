@@ -24,7 +24,7 @@
     <script src="./scripts/cnbeta.js"></script>
     <script>
         const params = new URLSearchParams(location.search);
-        navigator.serviceWorker.register("/ideas/demo/scripts/sw.js?proxy-url=" + encodeURIComponent(params.get("proxy-url") || ""));
+        navigator.serviceWorker.register("/ideas/demo/sw.js?proxy-url=" + encodeURIComponent(params.get("proxy-url") || ""));
     </script>
 </body>
 
