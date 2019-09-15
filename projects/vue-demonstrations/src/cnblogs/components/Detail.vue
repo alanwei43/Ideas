@@ -1,5 +1,7 @@
 <template>
-  <div v-html="newsHtml"></div>
+  <div style="margin: 0 auto; width: 90%">
+    <div v-html="newsHtml"></div>
+  </div>
 </template>
 <style>
 img {
