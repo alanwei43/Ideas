@@ -1,11 +1,9 @@
 <template>
   <div>
-    <ol>
-      <li v-for="item in news" :key="item.link">
-        <a href="javascript:void(0)" @click="showDetail(item)">{{item.title}}</a>
-      </li>
+    <ol class="news-list">
+      <li v-for="item in news" :key="item.link" @click="showDetail(item)">{{item.title}}</li>
     </ol>
-    <button @click="loadNextPage">Next Page -> {{page + 1}}</button>
+    <button id="next-page" @click="loadNextPage" class="full-btn">Next Page -> {{page + 1}}</button>
   </div>
 </template>
 

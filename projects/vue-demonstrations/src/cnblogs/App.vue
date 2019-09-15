@@ -5,8 +5,7 @@
 </template>
 
 <script>
-export default {
-};
+export default {};
 </script>
 
 <style>
@@ -14,6 +13,10 @@ export default {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+#app {
+  width: 100%;
+  overflow: hidden;
 }
 nav {
   background-color: #0094ff;
@@ -26,5 +29,30 @@ nav a {
   width: 49%;
   text-align: center;
   text-decoration: unset;
+}
+.full-btn {
+  width: 90%;
+  margin: 5px auto;
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  background-color: #0094ff;
+  color: white;
+  border: none;
+  box-shadow: 3px 3px 5px #ddd;
+  border-radius: 20px;
+  text-align: center;
+}
+.news-list {
+}
+.news-list li {
+  margin: 5px auto;
+  display: block;
+  width: 90%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  color: blue;
+  font-size: 14px;
 }
 </style>
