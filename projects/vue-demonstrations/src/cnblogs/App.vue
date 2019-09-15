@@ -46,13 +46,13 @@ nav a {
 .news-list {
 }
 .news-list li {
-  margin: 5px auto;
+  margin: 10px auto;
   display: block;
   width: 90%;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   color: blue;
-  font-size: 14px;
+  font-size: 16px;
 }
 </style>
